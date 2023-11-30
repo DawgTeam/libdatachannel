@@ -43,10 +43,12 @@ Cmdline::Cmdline (int argc, char *argv[]) // ISO C++17 not allowed: throw (std::
 
   static struct option long_options[] =
   {
+	      {"server", no_argument, NULL, 'i'},
     {"noStun", no_argument, NULL, 'n'},
     {"udpMux", no_argument, NULL, 'm'},
     {"stunServer", required_argument, NULL, 's'},
     {"stunPort", required_argument, NULL, 't'},
+	      {"port", required_argument, NULL, 'p'},
     {"webSocketServer", required_argument, NULL, 'w'},
     {"webSocketPort", required_argument, NULL, 'x'},
     {"help", no_argument, NULL, 'h'},
@@ -56,10 +58,12 @@ Cmdline::Cmdline (int argc, char *argv[]) // ISO C++17 not allowed: throw (std::
   _program_name += argv[0];
 
   /* default values */
+  _i = false;
   _n = false;
   _m = false;
   _s = "stun.l.google.com";
   _t = 19302;
+  _p = 9000;
   _w = "localhost";
   _x = 8000;
   _h = false;
@@ -69,6 +73,10 @@ Cmdline::Cmdline (int argc, char *argv[]) // ISO C++17 not allowed: throw (std::
     {
       switch (c)
         {
+	  	case 'i':
+		  _i = true;
+		  break;
+		  
         case 'n':
           _n = true;
           break;
@@ -96,6 +104,22 @@ Cmdline::Cmdline (int argc, char *argv[]) // ISO C++17 not allowed: throw (std::
               throw (std::range_error(err));
             }
           break;
+		  
+		case 'p':
+		  _p = atoi (optarg);
+		  if (_p < 0)
+		  {
+			  std::string err;
+			  err += "parameter range error: t must be >= 0";
+			  throw (std::range_error(err));
+		  }
+		  if (_p > 65535)
+		  {
+			  std::string err;
+			  err += "parameter range error: t must be <= 65535";
+			  throw (std::range_error(err));
+		  }
+		  break;
 
         case 'w':
           _w = optarg;
@@ -123,7 +147,8 @@ Cmdline::Cmdline (int argc, char *argv[]) // ISO C++17 not allowed: throw (std::
           break;
 
         default:
-          this->usage (EXIT_FAILURE);
+          //this->usage (EXIT_FAILURE);
+		  break;
 
         }
     } /* while */

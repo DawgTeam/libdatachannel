@@ -34,6 +34,7 @@ class Cmdline
 {
 private:
   /* parameters */
+	bool _i;
   bool _n;
   bool _m;
   std::string _s;
@@ -41,6 +42,7 @@ private:
   std::string _w;
   int _x;
   bool _h;
+  int _p;
 
   /* other stuff to keep track of */
   std::string _program_name;
@@ -57,10 +59,12 @@ public:
   /* return next (non-option) parameter */
   int next_param () { return _optind; }
 
+  bool isServer() const { return _i; }
   bool noStun () const { return _n; }
   bool udpMux () const { return _m; }
   std::string stunServer () const { return _s; }
   int stunPort () const { return _t; }
+  int bindPort () const { return _p; }
   std::string webSocketServer () const { return _w; }
   int webSocketPort () const { return _x; }
   bool h () const { return _h; }

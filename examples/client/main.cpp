@@ -39,6 +39,8 @@ std::string localId;
 std::unordered_map<std::string, shared_ptr<rtc::PeerConnection>> peerConnectionMap;
 std::unordered_map<std::string, shared_ptr<rtc::DataChannel>> dataChannelMap;
 
+int Counter = 0;
+
 shared_ptr<rtc::PeerConnection> createPeerConnection(const rtc::Configuration &config,
                                                      weak_ptr<rtc::WebSocket> wws, std::string id);
 std::string randomId(size_t length);
@@ -66,9 +68,16 @@ int main(int argc, char **argv) try {
 	if (params.udpMux()) {
 		std::cout << "ICE UDP mux enabled" << std::endl;
 		config.enableIceUdpMux = true;
+		config.portRangeBegin = params.bindPort();
+		config.portRangeEnd = params.bindPort();
 	}
 
 	localId = randomId(4);
+	bool isServer = params.isServer();
+	if (isServer) {
+		std::cout << "Server mode enabled" << std::endl;
+		localId = "dedic";
+	}
 	std::cout << "The local ID is " << localId << std::endl;
 
 	auto ws = std::make_shared<rtc::WebSocket>();
@@ -140,6 +149,12 @@ int main(int argc, char **argv) try {
 
 	while (true) {
 		std::string id;
+		
+		// Check is server mode
+		if (isServer) {
+			continue;
+		}
+		
 		std::cout << "Enter a remote ID to send an offer:" << std::endl;
 		std::cin >> id;
 		std::cin.ignore();
@@ -176,6 +191,11 @@ int main(int argc, char **argv) try {
 			else
 				std::cout << "Binary message from " << id
 				          << " received, size=" << std::get<rtc::binary>(data).size() << std::endl;
+			
+			// Echo back
+			Counter++;
+			if (auto dc = wdc.lock())
+				dc->send("OKAY OKAY " + localId + " --- " + std::to_string(Counter));
 		});
 
 		dataChannelMap.emplace(id, dc);
@@ -236,7 +256,7 @@ shared_ptr<rtc::PeerConnection> createPeerConnection(const rtc::Configuration &c
 
 		dc->onClosed([id]() { std::cout << "DataChannel from " << id << " closed" << std::endl; });
 
-		dc->onMessage([id](auto data) {
+		dc->onMessage([id, wdc = make_weak_ptr(dc)](auto data) {
 			// data holds either std::string or rtc::binary
 			if (std::holds_alternative<std::string>(data))
 				std::cout << "Message from " << id << " received: " << std::get<std::string>(data)
@@ -244,6 +264,11 @@ shared_ptr<rtc::PeerConnection> createPeerConnection(const rtc::Configuration &c
 			else
 				std::cout << "Binary message from " << id
 				          << " received, size=" << std::get<rtc::binary>(data).size() << std::endl;
+			
+			// Echo back
+			Counter++;
+			if (auto dc = wdc.lock())
+				dc->send("OKAY OKAY " + localId + " --- " + std::to_string(Counter));
 		});
 
 		dataChannelMap.emplace(id, dc);
