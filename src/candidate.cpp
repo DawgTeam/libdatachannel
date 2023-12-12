@@ -228,12 +228,6 @@ Candidate::operator string() const {
 	return line.str();
 }
 
-char *Candidate::toString() const {
-	std::ostringstream line;
-	line << "a=" << candidate();
-	return const_cast<char *>(line.str().c_str());
-}
-
 bool Candidate::operator==(const Candidate &other) const {
 	return (mFoundation == other.mFoundation && mService == other.mService && mNode == other.mNode);
 }

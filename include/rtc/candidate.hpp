@@ -39,7 +39,6 @@ public:
 	string candidate() const;
 	string mid() const;
 	operator string() const;
-	char* toString() const;
 
 	bool operator==(const Candidate &other) const;
 	bool operator!=(const Candidate &other) const;
