@@ -72,6 +72,7 @@ public:
 
 	operator string() const;
 	string generateSdp(string_view eol = "\r\n") const;
+	char* toString() const;
 	string generateApplicationSdp(string_view eol = "\r\n") const;
 
 	class RTC_CPP_EXPORT Entry {

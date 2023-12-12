@@ -268,6 +268,7 @@ void Description::addCandidates(std::vector<Candidate> candidates) {
 void Description::endCandidates() { mEnded = true; }
 
 Description::operator string() const { return generateSdp("\r\n"); }
+char *Description::toString() const { return const_cast<char *>(generateSdp("\r\n").c_str()); }
 
 string Description::generateSdp(string_view eol) const {
 	std::ostringstream sdp;
