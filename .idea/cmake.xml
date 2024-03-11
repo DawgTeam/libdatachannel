@@ -2,7 +2,7 @@
 <project version="4">
   <component name="CMakeSharedSettings">
     <configurations>
-      <configuration PROFILE_NAME="Release" ENABLED="true" CONFIG_NAME="Release" GENERATION_OPTIONS="-DCMAKE_OSX_ARCHITECTURES:STRING=x86_64 -DCMAKE_SKIP_RPATH:BOOL=NO -DOPENSSL_CRYPTO_LIBRARY:FILEPATH=/usr/local/homebrew/lib/libcrypto.dylib -DOPENSSL_INCLUDE_DIR:PATH=/usr/local/homebrew/include -DOPENSSL_SSL_LIBRARY:FILEPATH=/usr/local/homebrew/lib/libssl.dylib -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.13">
+      <configuration PROFILE_NAME="Release" ENABLED="true" CONFIG_NAME="Release" GENERATION_OPTIONS="-DCMAKE_OSX_ARCHITECTURES:STRING=x86_64 -DCMAKE_SKIP_RPATH:BOOL=NO -DOPENSSL_CRYPTO_LIBRARY:FILEPATH=/opt/homebrew/opt/openssl@1.1/lib/libcrypto.dylib -DOPENSSL_INCLUDE_DIR:PATH=/opt/homebrew/opt/openssl@1.1/include -DOPENSSL_SSL_LIBRARY:FILEPATH=/opt/homebrew/opt/openssl@1.1/lib/libssl.dylib -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.13">
         <ADDITIONAL_GENERATION_ENVIRONMENT>
           <envs>
             <env name="DYLD_LIBRARY_PATH" value="/usr/local/homebrew/Cellar/openssl@3/3.2.0/lib" />
